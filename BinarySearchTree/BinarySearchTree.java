@@ -60,15 +60,92 @@ public class BinarySearchTree {
     }
     return false;
   }
+
+  public void remove(int data) {
+    Node parent = null;
+    Node current = root;
+    while (current != null) {
+      if (data < current.data) {
+        parent = current;
+        current = current.left;
+      } else if (current.data < data) {
+        parent = current;
+        current = current.right;
+      } else if (current.data == data) {
+        if (current.left == null && current.right == null) {
+          // 子ノードなし→ノードをそのまま削除
+          if (current == root) {
+            root = null;
+          } else {
+            updateLink(parent, current, null);
+          }
+        } else if (current.left != null && current.right == null) {
+          // 子ノードは左のみ→子ノードが親ノードに直接参照されるようにする
+          if (current == root) {
+            root = root.left;
+          } else {
+            updateLink(parent, current, current.left);
+          }
+        } else if (current.left == null && current.right != null) {
+          // 子ノードは右のみ→子ノードが親ノードに直接参照されるようにする
+          if (current == root) {
+            root = root.right;
+          } else {
+            updateLink(parent, current, current.right);
+          }
+        } else {
+          // 子ノードが2つの場合
+
+          // まず削除対象ノードの右部分木の最小ノードを取得（左に進めば最小値が得られる）
+          Node min_parent = current;
+          Node min = current.right;
+          while (min.left != null) {
+            min_parent = min;
+            min = min.left;
+          }
+
+          // 最小ノードの右ノードを最小ノードの親が直接参照するようにする
+          // 削除対象がparentか（左に進んだか）で場合分けをする必要がある
+          if (min_parent == current) {
+            min_parent.right = min.right;
+          } else {
+            min_parent.left = min.right;
+          }
+
+          // 最小ノードを削除対象ノードに置き換える（削除対象ノードの左右の子を引き継ぐ）
+          min.left = current.left;
+          min.right = current.right;
+          if (current == root) {
+            root = min;
+          } else {
+            updateLink(parent, current, min);
+          }
+          return;
+
+
+        }
+      }
+    }
+  }
+
+  //ノードの付替えを行うメソッド
+  private void updateLink(Node parent, Node target, Node replace) {
+    if (parent.left == target) {
+      parent.left = replace;
+    } else if (parent.right == target) {
+      parent.right = replace;
+    }
+  }
   public static void main(String[] args) {
     BinarySearchTree tree = new BinarySearchTree();
 
-    int[] data = { 3, 4, 7, 9, 1, 2, 3, 6, 5 };
+    int[] data = { 5, 3, 8, 2, 1, 4, 9, 6 };
     for (int i = 0; i < data.length; i++) {
       tree.add(data[i]);
     }
 
-    System.out.println(tree.contains(3));
-    System.out.println(tree.contains(10));
+    System.out.println(tree.contains(5));
+    tree.remove(5);
+    System.out.println(tree.contains(5));
   }
 }
