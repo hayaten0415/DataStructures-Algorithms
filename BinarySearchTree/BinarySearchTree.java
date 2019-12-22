@@ -136,6 +136,7 @@ public class BinarySearchTree {
       parent.right = replace;
     }
   }
+
   public static void main(String[] args) {
     BinarySearchTree tree = new BinarySearchTree();
 
@@ -144,8 +145,19 @@ public class BinarySearchTree {
       tree.add(data[i]);
     }
 
-    System.out.println(tree.contains(5));
-    tree.remove(5);
-    System.out.println(tree.contains(5));
+    tree.inOrder();
+  }
+  
+  public void inOrder() {
+    inOrder(root);
+    System.out.println();
+  }
+
+  private void inOrder(Node n) {
+    if (n != null) {
+      inOrder(n.left);
+      System.out.print(n.data + ", ");
+      inOrder(n.right);
+    }
   }
 }
