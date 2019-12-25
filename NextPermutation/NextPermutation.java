@@ -19,6 +19,8 @@ class NextPermutation {
     reverse(nums, i + 1);
   }
 
+  //既にソート済みの配列を逆順に並び替えるだけなので
+  //O(n)で可能、厳密にはO(n/2)
   private void reverse(int[] nums, int start) {
     int i = start;
     int l = nums.length - 1;
