@@ -21,7 +21,7 @@ class NextPermutation {
 
   //既にソート済みの配列を逆順に並び替えるだけなので
   //O(n)で可能、厳密にはO(n/2)
-  private void reverse(int[] nums, int start) {
+  private static void reverse(int[] nums, int start) {
     int i = start;
     int l = nums.length - 1;
     while (i < l) {
@@ -41,7 +41,7 @@ class NextPermutation {
     }
   }
 
-  private void swap(int[] nums, int i, int l) {
+  private static void swap(int[] nums, int i, int l) {
     int temp = nums[i];
     nums[i] = nums[l];
     nums[l] = temp;
